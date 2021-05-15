@@ -1,0 +1,70 @@
+Please enter the input transation file path:
+C:\Users\PichikalaNagaVenkata\Desktop\DataBase2\cautious-Waiting\input2.txt
+Please choose the deadlock prevention scheme. 
+1.Wound-Wait
+2.Wait-Die
+3.Cautious Waiting
+3
+
+b1;
+TID:1,operation:b,dataItem:null
+Begin T1: Record is added to transaction table with Tid=1 and TS(T1)=1. T1 state=Active
+
+r1(Y);
+TID:1,operation:r,dataItem:Y
+Y read locked by T1: Lock table record for Y is created with mode R (T1 holds lock).
+
+w1(Y);
+TID:1,operation:w,dataItem:Y
+Read lock upgraded to write lock for item Y by T1, lock table updated to mode W
+
+r1(Z);
+TID:1,operation:r,dataItem:Z
+Z read locked by T1: Lock table record for Z is created with mode R (T1 holds lock).
+
+b2;
+TID:2,operation:b,dataItem:Z
+Begin T2: Record is added to transaction table with Tid=2 and TS(T2)=2. T2 state=Active
+
+r2(Y);
+TID:2,operation:r,dataItem:Y
+Write Read conflict between T2 and T1
+T2 'BLOCKED'
+Transaction T2 is blocked and this operation has been added to waiting list. T2 is waiting
+
+b3;
+TID:3,operation:b,dataItem:Y
+Begin T3: Record is added to transaction table with Tid=3 and TS(T3)=3. T3 state=Active
+
+r3(Z);
+TID:3,operation:r,dataItem:Z
+Z read locked by T3: Lock table record for Z is updated (T1, T3 hold R lock on Z)
+
+w1(Z);
+TID:1,operation:w,dataItem:Z
+Read Write conflict between T1 and multiple Transactions in readlock list
+T1 'BLOCKED'
+Transaction T1 is blocked and this operation has been added to waiting list. T1 is waiting
+
+e1;
+TID:1,operation:e,dataItem:Z
+Transaction T1 is already BLOCKED
+Transaction T1 is blocked and its 'End' operation has been added to its waiting list. T1 is waiting
+
+w3(Z);
+TID:3,operation:w,dataItem:Z
+Read Write conflict between T3 and multiple Transactions in readlock list
+T3 is aborted and releases Read lock from item Z
+Transaction T1 is unblocked
+Transaction T1 has been granted 'Write Lock' for data item Z
+Transaction T1 is committed and all the locks are released.
+Transaction T2 is unblocked
+Transaction T2 has been appended to readlock list for data item Y. So, it has acquired 'Read Lock' on Y
+
+e3;
+TID:3,operation:e,dataItem:Z
+Transaction T3 is already aborted
+
+e2;
+TID:2,operation:e,dataItem:Z
+Transaction T2 is committed and all the locks are released.
